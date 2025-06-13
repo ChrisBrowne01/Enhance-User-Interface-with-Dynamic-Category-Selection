@@ -1,3 +1,16 @@
+/* Define CSS Variables (place these ideally in App.css or a global stylesheet) */
+:root {
+    --tag-bg-light: #e0e0e0; /* Default background for unselected tags in light mode */
+    --tag-border: #ccc;
+    --text-color: #333;
+}
+
+.dark-mode {
+    --tag-bg-light: #555; /* Darker default background in dark mode */
+    --tag-border: #777;
+    --text-color: #eee;
+}
+
 /* Add styles for individual category buttons */
 .tag {
   background-color: var(--tag-bg-light); 
@@ -10,7 +23,14 @@
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   white-space: nowrap;
 }
-
+/* In FormButton.css */
+.category-selector-group .tag:last-child {
+  /* existing styles */
+  transition: background-color 0.3s ease, transform 0.1s ease-out; /* Added transition */
+  border: 1px solid var(--tag-border, #ccc); /* Optional: Define a border variable */
+  color: var(--text-color, #333);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
+}
 body.dark-mode .tag {
   background-color: var(--tag-bg-light);
   color: var(--tag-text-light);
@@ -20,6 +40,7 @@ body.dark-mode .tag {
 .tag:hover, .tag.selected-tag:hover {
   border-color: var(--primary-color); 
   box-shadow: 0 0 5px rgba(174, 0, 255, 0.3);
+  transform: translateY(-2px); /* Slight lift on hover */
 }
 
 body.dark-mode .bot-input:focus,
@@ -46,3 +67,17 @@ body.dark-mode .tag.selected-tag {
     padding: var(--spacing-md) var(--spacing-xl); 
   }
 }
+
+
+.tag:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.selected-tag {
+  /* This class is added to the selected button by CategorySelector */
+  border-color: #007bff; /* Example: a stronger border for selected */
+  color: white; /* Example: white text for selected tags */
+  /* Background color set via inline style for specific categories */
+}
+

@@ -1,6 +1,6 @@
 import React from 'react';
 import Logo from "../images/job-board-app-pic.png";
-import { JobForm } from './JobForm';
+// import { JobForm } from './JobForm';
 import './AppForm.css'; // Ensure this path is correct for form styles
 
 export const Header = ({ addNewJob, newJob, setNewJob, search, setSearch, error, setError }) => {
@@ -10,7 +10,7 @@ export const Header = ({ addNewJob, newJob, setNewJob, search, setSearch, error,
         <img className="object-fit-contain" height="100" width="auto" src={Logo} alt="Job Board Application" />
         <a href="/">Job Management Application</a>
       </h1>
-      <JobForm
+      {/* <JobForm
         addNewJob={addNewJob}
         newJob={newJob}
         setNewJob={setNewJob}
@@ -18,7 +18,7 @@ export const Header = ({ addNewJob, newJob, setNewJob, search, setSearch, error,
         setSearch={setSearch}
         error={error}
         setError={setError}
-      />
+      /> */}
     </header>
   );
 };

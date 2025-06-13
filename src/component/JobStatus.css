@@ -43,17 +43,27 @@
   font-size: 13px;
 }
 
+.edit-button {
+  display: flex;
+  justify-content: end;
+}
+
 @media (max-width: 767.98px) {
   .job-item-detail {
     flex-direction: column;
     align-items: flex-start;
   }
+  .jobEdit {
+  display: flex;
+  justify-content: flex-end;
+}
 }
 
 @media (max-width: 767.98px) {
   .job-item {
     max-width: 100%;
   }
+  
 }
 
 /* Style the status differently based on its value  */
@@ -173,12 +183,12 @@ body.dark-mode .job-action-button:hover {
 /* Delete job styling */
 
 .jobEdit, .jobDelete {
-  width: 30px;
+  width: 100%;
   height: 30px;
   border-radius: 95%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
