@@ -16,22 +16,13 @@ function App() {
   const [jobs, setJobs] = useState(() => {
     const savedJobs = localStorage.getItem('jobs');
     if (savedJobs) {
-      try{
-        const parsedJobs = JSON.parse(savedJobs);
-        return parsedJobs.map(job => ({
-          ...job,
-          category: Array.isArray(job.category) ? job.category : (job.category ? [job.category] : [])
-        }));
-      } catch (e) {
-        // Handle parsing errors (e.g., corrupted localStorage data)
-        console.error("Error parsing saved jobs from localStorage:", e);
-        return []; // Return an empty array or default jobs if parsing fails
-      }}
+      return JSON.parse(savedJobs);
+    }
     // Default jobs if no saved jobs
     return [
-      { id: 1, title: 'Parse Emails', status: 'To Start', category: ['Read Emails'] },
-      { id: 2, title: 'SAP Extraction', status: 'In Progress', category: ['Web Parsing'] },
-      { id: 3, title: 'Generate Report', status: 'Completed', category: ['Send Emails'] }
+      { id: 1, title: 'Parse Emails', status: 'To Start', category: 'Read Emails' },
+      { id: 2, title: 'SAP Extraction', status: 'In Progress', category: 'Web Parsing' },
+      { id: 3, title: 'Generate Report', status: 'Completed', category: 'Send Emails' }
     ];
   });
 
@@ -46,13 +37,13 @@ function App() {
   // State for new job form inputs (managed in App.js)
   const [newJob, setNewJob] = useState({
     title: '',
-    category: [],
+    category: '',
     status: 'To Start'
   });
 
   // States for edit functionality
   const [editingJob, setEditingJob] = useState(null); 
-  const [editForm, setEditForm] = useState({ id: '', title: '', status: '', category: [] });
+  const [editForm, setEditForm] = useState({ id: '', title: '', status: '', category: '' });
 
   // State for form-wide error messages (passed to JobForm)
   const [error, setError] = useState("");
@@ -75,22 +66,38 @@ function App() {
   };
 
   // Delete job based on ID
-  const onDeleteJob = (id) => { setJobs(jobs.filter((job) => job.id !== id));
+  const onDeleteJob = (id) => {
+    setJobs(jobs.filter((job) => job.id !== id));
     // If the deleted job was being edited, clear the editing state
     if (editingJob === id) {
       setEditingJob(null);
-      setEditForm({ id: '', title: '', status: '', category: [] });
+      setEditForm({ id: '', title: '', status: '', category: '' });
     }
   };
 
   // Update job status based on condition (JobStatus component's "Start/Complete" button)
   const updateJobStatus = (id) => {
     setJobs(
-      jobs.map(job => 
-        job.id === id ?
-          { ...job, status: (job.status === "To Start") ? "In Progress" : job.status === "In Progress" ? "Completed" : "To Start" }
-          : job
-      )
+      jobs.map(job => {
+        if (job.id === id) {
+          let newStatus;
+          switch (job.status) {
+            case "To Start":
+              newStatus = "In Progress";
+              break;
+            case "In Progress":
+              newStatus = "Completed";
+              break;
+            case "Completed":
+              newStatus = "To Start";
+              break;
+            default:
+              newStatus = "To Start"; 
+          }
+          return { ...job, status: newStatus };
+        }
+        return job;
+      })
     );
   };
 
@@ -99,14 +106,6 @@ function App() {
     // Basic validation is now handled in JobForm, but a final check here is good
     if (!jobDetails.title.trim() || jobDetails.title.trim().length < 3 || !jobDetails.category || !jobDetails.status || jobDetails.status === 'Select status...') {
         setError("Please fill all fields correctly.");
-        return;
-    }
-    if (jobDetails.category.length === 0) { // Check if the array is empty
-        setError("Please select at least one job category.");
-        return;
-    }
-    if (!jobDetails.status || jobDetails.status === 'Select status...') {
-        setError("Please select a job status.");
         return;
     }
 
@@ -118,12 +117,14 @@ function App() {
       id: newId,
       title: jobDetails.title.trim(),
       status: jobDetails.status.trim(),
-      category: jobDetails.category
+      category: jobDetails.category.trim()
     };
 
     setJobs(prevJobs => [...prevJobs, newJobListing]);
-    setNewJob({ title: '', category: [], status: 'To Start' });
-    setError("");
+
+    // Reset the newJob state in App.js. JobForm will pick this up via props.
+    setNewJob({ title: '', category: '', status: 'To Start' });
+    setError(""); // Clear any form-wide error after successful addition
 
     console.log("Submitting Job:", newJobListing);
     console.log("All Jobs:", [...jobs, newJobListing]);
@@ -131,11 +132,11 @@ function App() {
 
   // Edit Functions
   // Start editing a job
-  const onEditJob = (jobId) => {
+  const onEditJob = (jobId) => { // Takes jobId as argument
     const jobToEdit = jobs.find(job => job.id === jobId);
     if (jobToEdit) {
       setEditingJob(jobId);
-      setEditForm({ ...jobToEdit, category: jobToEdit.category || [] });
+      setEditForm({ ...jobToEdit });
       setError(""); 
     }
   };
@@ -158,9 +159,8 @@ function App() {
       setError("Job Title must be at least 3 characters.");
       return;
     }
-    // Validation for multi-select category in edit form
-    if (editForm.category.length === 0) {
-      setError("Please select at least one category for the edited job.");
+    if (!editForm.category || editForm.category === '') {
+      setError("Please select a category for the edited job.");
       return;
     }
     if (!editForm.status || editForm.status === '') {
@@ -172,13 +172,13 @@ function App() {
       job.id === editingJob ? { ...editForm } : job
     ));
     setEditingJob(null);
-    setEditForm({ id: '', title: '', status: '', category: [] }); 
+    setEditForm({ id: '', title: '', status: '', category: '' }); 
     setError(""); 
   };
 
   const cancelEdit = () => {
     setEditingJob(null);
-    setEditForm({ id: '', title: '', status: '', category: [] });
+    setEditForm({ id: '', title: '', status: '', category: '' });
     setError("");
   };
 
@@ -198,16 +198,7 @@ function App() {
       return;
     }
 
-    const newJobs = jobs.map(job => {
-      if (job.id === draggedJob.id) {
-        return { ...job, status: destination.droppableId };
-      }
-      return job;
-    });
-
-    setJobs(newJobs);
-
-/*     // Create a new array of jobs to avoid direct mutation
+    // Create a new array of jobs to avoid direct mutation
     const newJobs = Array.from(jobs);
 
     // Remove the dragged job from its original position
@@ -222,7 +213,7 @@ function App() {
     // let insertIndex = destination.index;
 
     const finalJobs = [...newJobs, updatedDraggedJob];
-    setJobs(finalJobs); */
+    setJobs(finalJobs);
   };
 
   return (

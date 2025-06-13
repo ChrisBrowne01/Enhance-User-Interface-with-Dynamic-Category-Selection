@@ -1,21 +1,13 @@
 import React from 'react';
-import './FormButton.css'; 
+import './FormButton.css'; // Your button specific styles (ensure this exists and has .tag and .selected-tag)
 
-export const FormButton = ({ value, selectCategory, selected }) => {
-  const addCSStoButton = {
-    ReadEmails: {backgroundColor:"orangered"},
-    WebParsing: {backgroundColor:"blue"},
-    SendEmails: {backgroundColor:"purple"},
-    default: {backgroundColor:"white"}
-  }
-
-  return (  
-    <button type="button" style={ selected ? addCSStoButton[value]:value.default }
-      value={value} 
-      name="category" 
-      onClick={() => selectCategory(value)}
-      className={`tag`}
-    >{value}
-    </button>
+export const FormButton = ({ value, handleCategoryClick, isSelected }) => {
+  return (
+    <button 
+    type="button" 
+    onClick={() => handleCategoryClick(value)} 
+    value={value} 
+    name="category" 
+    className={`tag ${isSelected ? 'sel0ected-tag' : ''}`}>{value}</button>
   );
 };

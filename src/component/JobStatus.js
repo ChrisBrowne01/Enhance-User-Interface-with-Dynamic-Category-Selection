@@ -2,7 +2,7 @@ import React from 'react';
 import deleteIcon from '../images/delete.png';
 import editIcon from '../images/edit.png';
 import './JobStatus.css';
-import './FormButton.css'
+import { FormButton } from './FormButton';
 
 // Added props for edit functionality
 export const JobStatus = ({ job, updateJobStatus, onDeleteJob, onEditJob }) => {
@@ -15,7 +15,12 @@ export const JobStatus = ({ job, updateJobStatus, onDeleteJob, onEditJob }) => {
         <h5 className="card-title">
           {job.title}
         </h5>
-        <div className="card-category"> 
+        <p className="card-category"> 
+          <FormButton value={job.category} />{/* Display category */}
+        </p>
+      </div>
+
+      <div className="card-footer">
         <div className="button-group">
           {/* Change or add Delete button icon */}
           <button onClick={() => updateJobStatus(job.id)} className="job-action-button" >
@@ -33,16 +38,6 @@ export const JobStatus = ({ job, updateJobStatus, onDeleteJob, onEditJob }) => {
           <div className='jobDelete' onClick={() => onDeleteJob(job.id)}>
             <img src={deleteIcon} className='deletingImg' alt="Delete" />
           </div>
-        </div>
-      </div>
-
-  
-        <div className="card-footer">
-          {Array.isArray(job.category) && job.category.map((cat) => (
-            <button key={cat} className="job-category-button tag" type="button">
-              {cat}
-            </button>
-          ))}
         </div>
       </div>
     </div>

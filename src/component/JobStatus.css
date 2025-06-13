@@ -121,25 +121,22 @@
   gap: 10px;
 }
 
-.card-footer {
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
+.card-category {
   font-size: 14px;
   line-height: 1.5;
   padding: 2px 5px;
   margin: 10px auto;
+  max-width: 110px;
   border-radius: 25px;
-  gap: 2px 1px;
 }
 
-.card-category {
+.card-footer {
   min-width: 50%;
 }
 
 .button-group {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .job-action-button {
