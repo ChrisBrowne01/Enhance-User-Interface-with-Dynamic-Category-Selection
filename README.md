@@ -1,8 +1,32 @@
-# Getting Started with Create React App
+# Practical Activity - Enhance User Interface with Dynamic Category Selection
+
+**Objective:** Improve the user interface of a React application by adding visual feedback for selected categories using dynamic CSS styling.
+
+**Aims:**
+
+- The importance of clear visual feedback in user interfaces
+- How to use inline styles in React components
+- The concept of conditional rendering based on component state
+- The use of objects to store different style options
+
+**Summary:**
+
+This activity reinforces the concepts of dynamic styling in React, state management, and conditional rendering. It improves upon the previous lesson by providing clear visual feedback to users when selecting categories, enhancing the overall user experience of the application.
+
+This activity allows students to practice:
+
+- Creating reusable React components
+- Managing component state
+- Implementing conditional rendering
+- Using inline styles in React
+- Handling user interactions with onClick events
+- Organizing code with objects for storing style information
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Available Scripts
 
 In the project directory, you can run:
 
