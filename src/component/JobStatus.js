@@ -3,26 +3,26 @@ import React from 'react';
 import deleteIcon from '../images/delete.png';
 import editIcon from '../images/edit.png';
 import './JobStatus.css';
-import './FormButton.css'; // For the tag styles
+import './FormButton.css';
 
 export const JobStatus = ({ job, updateJobStatus, onDeleteJob, onEditJob }) => {
   const statusClass = job.status.toLowerCase().replace(/\s/g, '-');
 
   // Define category styles to apply the correct background color
   const categoryStyles = {
-    'Read Emails': { backgroundColor: 'orange' },
-    'Web Parsing': { backgroundColor: 'blue' },
-    'Send Emails': { backgroundColor: 'yellow' },
+    'Read Emails': { backgroundColor: 'orange', color: '#f4f7f6' }, 
+    'Web Parsing': { backgroundColor: 'blue', color: '#f4f7f6' },
+    'Send Emails': { backgroundColor: 'yellow', color: '#343a40' },
     'default': { backgroundColor: 'var(--tag-bg-light)' }
   };
 
   return (
-    <div className={`ticket-item status-${statusClass}`}>
+    <div className={`job-item status-${statusClass}`}>
       <div className="card-body">
         <h5 className="card-title">
           {job.title}
         </h5>
-        <div className="card-actions"> {/* Renamed from card-category for clarity */}
+        <div className="card-actions"> 
           <button onClick={() => updateJobStatus(job.id)} className="job-action-button" >
             {job.status === "To Start" ? "Start Job" :
              job.status === "In Progress" ? "Complete" :
@@ -30,6 +30,24 @@ export const JobStatus = ({ job, updateJobStatus, onDeleteJob, onEditJob }) => {
              "Start Job"
             }
           </button>
+        </div>
+      </div>
+
+      <div className="card-footer">
+      
+        {/* Display the single category centered */}
+        <div className="card-footer-col-category">
+          {job.category && (
+            <button 
+              className="job-category-button tag" type="button" 
+              style={categoryStyles[job.category] || categoryStyles.default}>
+              {job.category}
+            </button>
+          )}
+        </div>
+      
+        {/* Display the edit and delete actions aligned right */}
+        <div className="card-footer-col-actions">
           <div className="edit-button" onClick={() => onEditJob(job.id)}>
             <img src={editIcon} className='editImg' alt="Edit" />
           </div>
@@ -37,20 +55,8 @@ export const JobStatus = ({ job, updateJobStatus, onDeleteJob, onEditJob }) => {
             <img src={deleteIcon} className='deletingImg' alt="Delete" />
           </div>
         </div>
-
-        {/* Display the single category */}
-        <div className="card-footer">
-          {job.category && ( // Only render if a category is selected
-            <button
-              className="job-category-button tag"
-              type="button"
-              style={categoryStyles[job.category] || categoryStyles.default} // Apply style dynamically
-            >
-              {job.category}
-            </button>
-          )}
-        </div>
       </div>
+
     </div>
   );
 };

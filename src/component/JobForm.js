@@ -27,6 +27,13 @@ export const JobForm = ({ addNewJob, newJob, setNewJob, search, setSearch, error
     setError(prevError => prevError === 'Please select a category.' ? '' : prevError);
   };
 
+  // Add a "Clear Categories" button
+  const handleClearCategories = () => {
+    setNewJob(prevJob => ({ ...prevJob, category: null }));
+    setError(""); 
+  };
+
+  // Handler to rest the form data
   const resetForm = () => {
     setNewJob({
       title: '',
@@ -34,7 +41,6 @@ export const JobForm = ({ addNewJob, newJob, setNewJob, search, setSearch, error
       status: 'To Start'
     });
     setError("");
-    setSuccessMessage('');
   };
 
   const handleSubmit = (e) => {
@@ -48,7 +54,7 @@ export const JobForm = ({ addNewJob, newJob, setNewJob, search, setSearch, error
       setError('Job title must be at least 3 characters long.');
       return;
     }
-    // Now check if newJob.category is null or empty string for single selection
+    // Check if newJob.category is null or empty string for single selection
     if (!newJob.category) { // Check if null or undefined
       setError('Please select a category.');
       return;
@@ -63,6 +69,7 @@ export const JobForm = ({ addNewJob, newJob, setNewJob, search, setSearch, error
     addNewJob(newJob);
 
     setSuccessMessage('Job successfully added!');
+    console.log('successMessage: ', successMessage);
     resetForm();
 
     setTimeout(() => {
@@ -92,12 +99,30 @@ export const JobForm = ({ addNewJob, newJob, setNewJob, search, setSearch, error
         <div className="form-details">
           <div className="bottom-line">
             <CategorySelector
-              onCategorySelect={handleCategorySelection} // Pass the callback
+              onCategorySelect={handleCategorySelection} 
               initialCategory={newJob.category} // Pass current category for initial selection/reset
             />
           </div>
           {error === 'Please select a category.' && (
             <p className="error-message">{error}</p>
+          )}
+
+          {/* Display the list of selected categories */}
+          {newJob.category > 0 && (
+            <div className="selected-categories-display">
+              <strong>Selected:</strong> {newJob.category.join(', ')}
+            </div>
+          )}
+
+          {/* Clear Categories Button */}
+          {newJob.category && (
+            <button
+              type="button" // Important: type="button" to prevent form submission
+              onClick={handleClearCategories}
+              className="clear-categories-button"
+            >
+              Clear Categories
+            </button>
           )}
         </div>
 
@@ -122,8 +147,9 @@ export const JobForm = ({ addNewJob, newJob, setNewJob, search, setSearch, error
           Add Jobs
         </button>
 
-        {successMessage && (<p className="success-message">{successMessage}</p>)}
       </form>
+
+      {successMessage && (<div className="valid-tooltip">{successMessage}</div>)}
 
       <FilterForm
         search={search}

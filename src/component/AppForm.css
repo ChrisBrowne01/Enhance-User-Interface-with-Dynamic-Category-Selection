@@ -10,6 +10,8 @@
   --selected-tag-border-light: rgba(255, 183, 0, 0.8);
   --submit-bg-light: #fa9c2a;
   --submit-hover-bg-light: #ff8d03;
+  --vaild-tooltip-bg-light: #198754e6;
+  --vaild-tooltip-text-light: #f4f7f6;
   --error-text-light: red;
 
   /* Re-defining primary/secondary if not in App.css, or ensure App.css is imported first */
@@ -47,6 +49,8 @@ body.dark-mode {
   --selected-tag-border-light: rgba(255, 183, 0, 0.5); /* Muted selected border */
   --submit-bg-light: #d37e2a; /* Darker orange for submit */
   --submit-hover-bg-light: #c26f1f; /* Even darker orange for hover */
+  --vaild-tooltip-bg-light: rgba(25, 135, 84, 0.95); /* Muted green for bg tooltip */
+  --vaild-tooltip-text-light: #f4f7f6; /* Muted green for bg tooltip */
   --error-text-light: #ff7777; /* Lighter red for dark mode errors */
 }
 
@@ -189,6 +193,21 @@ body.dark-mode .submit-data {
   font-weight: 500;
   color: var(--error-text-light); 
   width: 100%;
+}
+
+.valid-tooltip {
+  position: absolute;
+  bottom: 15px;
+  display: block;
+  z-index: 5;
+  width: -webkit-fill-available;
+  margin-inline: var(--spacing-xl);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  margin-top: var(--spacing-xl);
+  font-size: .875rem;
+  color: var(--vaild-tooltip-text-light);
+  background-color: var(--vaild-tooltip-bg-light);
+  border-radius: .25rem;
 }
 
 form.filter-input {

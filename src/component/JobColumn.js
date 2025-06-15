@@ -9,7 +9,7 @@ import './AppForm.css'
 export const JobColumn = ({
   jobs,
   title,
-  image, // Changed from imgIcon for clarity
+  image,
   alt,
   status,
   search,
@@ -25,6 +25,7 @@ export const JobColumn = ({
   formError
 }) => {
 
+  // Filter jobs: first filter by status, then by search query
   const filteredByStatus = jobs.filter(job => job.status === status);
   const filteredJobs = filteredByStatus.filter((job) => {
     return Object.keys(job).some((key) =>
@@ -33,16 +34,18 @@ export const JobColumn = ({
     );
   });
 
+  // Determine the status class for the column based on the title
   const columnStatusClass = title.toLowerCase().replace(/\s/g, '-');
 
   return (
     <section>
+      {/* Column Header Tile */}
       <div className={`job-column status-${columnStatusClass}`}>
         <h2 className='heading-status'>{title}</h2>
         <img className="status-image" src={image} alt={alt} />
-        <p>Below are jobs that {status === "To Start" ? "need to be started:" : `are ${status}:`}</p>
+        <p>Below are jobs {status === "To Start" ? "which need to Start:" : `that are ${status}:`}</p>
       </div>
-
+      {/* Droppable area for jobs */}
       <Droppable droppableId={droppableId}>
         {(provided) => (
           <ul
@@ -51,14 +54,15 @@ export const JobColumn = ({
             ref={provided.innerRef}
           >
             {filteredJobs.map((job, index) => (
+              // Draggable job item
               <Draggable key={job.id} draggableId={job.id.toString()} index={index}>
                 {(providedDraggable) => (
-                  <li
-                    ref={providedDraggable.innerRef}
+                  <li ref={providedDraggable.innerRef}
                     {...providedDraggable.draggableProps}
                     {...providedDraggable.dragHandleProps}
                     className="draggable-item"
                   >
+                    {/* Conditional rendering for edit mode */}
                     {editingJob === job.id ? (
                       <form onSubmit={saveEdit} className={`edit-job-form status-${columnStatusClass}`}>
                         <input

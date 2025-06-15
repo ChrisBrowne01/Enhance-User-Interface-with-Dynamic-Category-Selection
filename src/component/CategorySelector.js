@@ -1,41 +1,29 @@
 // ./src/component/CategorySelector.js
 import React, { useState, useEffect } from 'react';
-import { FormButton } from './FormButton'; // Re-using our generic button component
-import './FormButton.css'; // Import button specific CSS
+import { FormButton } from './FormButton';
+import './FormButton.css'; 
 
 export function CategorySelector({ onCategorySelect, initialCategory }) {
-  // Task 3: Create a state variable to keep track of the selected category.
+  // State variable to keep track of the selected category
   const [selectedCategory, setSelectedCategory] = useState(initialCategory || null);
 
-  // Task 2: Create an object called categoryStyles that defines different background colors
+  // Defines different background colors
   const categoryStyles = {
-    'Read Emails': { backgroundColor: 'orange' }, // Keys match display values
+    'Read Emails': { backgroundColor: 'orange' }, 
     'Web Parsing': { backgroundColor: 'blue' },
     'Send Emails': { backgroundColor: 'yellow' },
-    'default': { backgroundColor: 'var(--tag-bg-light)' } // Assuming --tag-bg-light is defined in your CSS
+    'default': { backgroundColor: 'var(--tag-bg-light)' } 
   };
 
-  // Task 4 & 7 (part): Function to get the style based on selection
+  // Function to get the style based on selection
   const getCategoryStyle = (categoryValue) => {
     return selectedCategory === categoryValue ? categoryStyles[categoryValue] : categoryStyles.default;
   };
 
-  // Task 6: Implement an onClick handler for each button that updates the selected category.
-  // Task 8: Ensure that only one category can be selected at a time.
+  // OnClick handler for each button to update and ensure only one category selection at a time
   const handleCategoryClick = (categoryValue) => {
     setSelectedCategory(categoryValue);
-    // Communicate the selected category back to the parent (JobForm)
-    if (onCategorySelect) {
-      onCategorySelect(categoryValue);
-    }
-  };
-
-  // Bonus 1: Add a "Reset" button that clears the selected category.
-  const handleResetClick = () => {
-    setSelectedCategory(null);
-    if (onCategorySelect) {
-      onCategorySelect(null); // Communicate reset to parent
-    }
+    if (onCategorySelect) onCategorySelect(categoryValue);
   };
 
   // Synchronize internal state with external prop (initialCategory)
@@ -51,22 +39,17 @@ export function CategorySelector({ onCategorySelect, initialCategory }) {
   ];
 
   return (
-    <div className="category-selector-group"> {/* Added a wrapper div for styling */}
-      {/* Task 5 & 7: Render buttons for each category and apply styles */}
+    <div className="category-selector-group"> 
+      {/* Render buttons for each category and apply styles */}
       {categories.map((cat) => (
         <FormButton
-          key={cat.value} // Unique key for list items
+          key={cat.value}
           value={cat.value}
           onClick={() => handleCategoryClick(cat.value)}
-          style={getCategoryStyle(cat.value)} // Apply inline style
-          className={`tag ${selectedCategory === cat.value ? 'selected-tag' : ''}`} // Add class for CSS transition
+          className={`tag ${selectedCategory === cat.value ? 'selected-tag' : ''}`}
+          style={getCategoryStyle(cat.value)}
         />
       ))}
-
-      {/* Bonus 1: Reset Button */}
-      <button className="tag reset-button" onClick={handleResetClick}>
-        Reset Categories
-      </button>
     </div>
   );
 }
